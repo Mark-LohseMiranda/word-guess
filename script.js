@@ -1,10 +1,12 @@
 var clickStart = document.querySelector("#start");
+var clickReset = document.querySelector("#reset");
 var timeEl = document.querySelector("#time");
 var totalEl = document.querySelector("#total");
 var wonEl = document.querySelector("#won");
 var lostEl = document.querySelector("#lost");
 var highEl = document.querySelector("#high");
-var timeLeft = 80;
+var timeLeft;
+const gameTimer = 80;
 var gameOver = false;
 var total = 0;
 var won = 0;
@@ -12,22 +14,25 @@ var lost = 0;
 var high = 0;
 var randomWord = "";
 var size = 0;
+var timeInterval
 
-var words = ["fuck", "shit", "damn", "bitch"];
+var words = ["afucak", "ashiat", "adaman", "abitach", "aardvark"];
 
 function setTime() {
   timeEl.textContent = time;
 }
 
 function countdown() {
-  var timeInterval = setInterval(function () {
+  timeLeft = gameTimer;
+  timeInterval = setInterval(function () {
     timeLeft--;
     timeEl.textContent = timeLeft;
     if (timeLeft < 1 || gameOver) {
       clearInterval(timeInterval);
     }
   }, 1000);
-}
+} 
+
 
 function scoreboard() {
   totalEl.textContent = `Total games played: ${total}`;
@@ -38,7 +43,7 @@ function scoreboard() {
 
 
 function getRandomWord() {
-    randomWord = words[Math.floor(Math.random() * 4)];
+    randomWord = words[Math.floor(Math.random() * 5)];
     console.log(randomWord);
     console.log(randomWord.length);
     size = randomWord.length;
@@ -55,41 +60,50 @@ function playingField() {
 }
 
 function resetPlayingField() {
+    timeLeft = gameTimer;
     var elements = document.getElementsByClassName("box");
     while(elements.length >0){
         elements[0].parentNode.removeChild(elements[0]);
     }
+    gameOver = false;
 }
 
 
 function playerKey(event) {
-    
-    var position = randomWord.indexOf(event.key);
-    if (position != -1) {
-        document.querySelector("#letter" + position).setAttribute("class", "box");
-        document.querySelector("#letter" + position).textContent =
-        randomWord[position];
+  
+  for (let i = 0; i < randomWord.length; i++) {
+    if (event.key === randomWord[i]) {
+      document.querySelector("#letter" + i).setAttribute("class", "box");
+        document.querySelector("#letter" + i).textContent =
+        randomWord[i];
         size--;
     }
-    if (size === 0 && timeLeft > 0) {
-        gameOver = true;
-        resetPlayingField();
+    
+  }  
 
-    }
 }
 
 function checkStatus() {
     if (size === 0 && timeLeft > 0) {
         alert("You won!");
+        gameOver = true;
     }
 }
 
 
-document.addEventListener("keyup", playerKey);
+clickReset.addEventListener("click", function () {
+  gameOver = false;
+  clearInterval(timeInterval);
+  timeEl.textContent = gameTimer;
+  resetPlayingField();
+});
+
+document.addEventListener("keydown", playerKey);
 
 clickStart.addEventListener("click", function () {
   if (timeLeft === 80 || gameOver) {
-      timeLeft === 80
+      
+      resetPlayingField();
       countdown();
       getRandomWord();
       playingField();

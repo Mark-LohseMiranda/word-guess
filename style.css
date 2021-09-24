@@ -58,6 +58,10 @@ h1 {
     background: blue;
     
 }
+
+.button {
+    display: inline-flex;
+}
 .word {
     display: inline-flex;
     
