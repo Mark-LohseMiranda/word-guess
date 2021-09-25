@@ -93,6 +93,7 @@ function checkStatus() {
 
 clickReset.addEventListener("click", function () {
   gameOver = false;
+  clickStart.disabled = false;
   clearInterval(timeInterval);
   timeEl.textContent = gameTimer;
   resetPlayingField();
@@ -101,14 +102,13 @@ clickReset.addEventListener("click", function () {
 document.addEventListener("keydown", playerKey);
 
 clickStart.addEventListener("click", function () {
-  if (timeLeft === 80 || gameOver) {
-      
+      clickStart.disabled = true;
       resetPlayingField();
       countdown();
       getRandomWord();
       playingField();
   }
-});
+);
 
 
 
